@@ -1,0 +1,30 @@
+.fadeOut {
+  transition: all 1s ease-in-out;
+  width: 100%;
+  object-fit: cover;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.video {
+  background-color: #ccc;
+}
+
+.hide {
+  opacity: 0;
+}
+
+.video-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.wait-bg {
+  background-color: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  left: 0;
+  top: 0;
+}

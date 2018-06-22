@@ -1,0 +1,9 @@
+build
+build-dev
+node_modules
+src/server/view/
+.tags*
+.idea
+*.log
+.DS_Store
+*.out
