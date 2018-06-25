@@ -45,7 +45,6 @@ export default class BasePage extends Component {
           <div className="root" id="app">
             {children}
           </div>
-          <script src="https://unpkg.com/axios/dist/axios.min.js" />
           <script type="text/javascript" src={`/vendor_${version}.js?`} />
           <script type="text/javascript" src={`/${bundleName}.js?${random}`} />
         </body>
