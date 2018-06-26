@@ -17,7 +17,9 @@ class UseCase extends React.Component {
             <div className={styles.tab}>流程运行</div>
           </div>
         </div>
-        <AddProcess />
+        <div className={styles.mainContent}>
+          <AddProcess />
+        </div>
       </div>
     );
   }
