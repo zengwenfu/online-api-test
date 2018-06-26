@@ -5,11 +5,17 @@ import './common.scss';
 import styles from './user-case.scss';
 import Header from 'components/common/Header';
 import AddProcess from 'components/user-case/AddProcess';
+import {getGlobalEvent} from 'utils/eventEmitter';
 
 class UseCase extends React.Component {
+  onContainerClick() {
+    const globalEvent = getGlobalEvent();
+    globalEvent.emit('containerClick');
+  }
+
   render() {
     return (
-      <div className="root">
+      <div className="root" onClick={() => this.onContainerClick()} role="presentation">
         <Header />
         <div className={styles.tabs}>
           <div className="main-content">

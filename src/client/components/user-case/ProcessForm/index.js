@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './style.scss';
 import {stopPropagation} from 'utils/common';
+import {getGlobalEvent} from 'utils/eventEmitter';
 
 export default class ProcessForm extends React.Component {
   constructor(props) {
@@ -10,6 +11,22 @@ export default class ProcessForm extends React.Component {
       showSelectPanel: false,
       methodType: 'GET'
     };
+  }
+
+  onContainerClick() {
+    this.setState({
+      showSelectPanel: false
+    });
+  }
+
+  componentDidMount() {
+    const globalEvent = getGlobalEvent();
+    globalEvent.on('containerClick', this.onContainerClick.bind(this));
+  }
+
+  componentWillUnmount() {
+    const globalEvent = getGlobalEvent();
+    globalEvent.off('containerClick', this.onContainerClick);
   }
 
   getRadioClassName(value) {
@@ -26,7 +43,8 @@ export default class ProcessForm extends React.Component {
     });
   }
 
-  onMethodClick() {
+  onMethodClick(e) {
+    stopPropagation(e);
     this.setState({
       showSelectPanel: true
     });
@@ -94,7 +112,7 @@ export default class ProcessForm extends React.Component {
           <label htmlFor="method" className={styles.label}>
             请求类型:
           </label>
-          <div className={styles.methodWrap} onClick={() => this.onMethodClick()} role="presentation">
+          <div className={styles.methodWrap} onClick={(e) => this.onMethodClick(e)} role="presentation">
             <input
               name="method"
               className={[styles.input, styles.method].join(' ')}
@@ -147,6 +165,7 @@ export default class ProcessForm extends React.Component {
         <div className={styles.btns}>
           <div className={styles.btn}>添加串行流程</div>
           <div className={styles.btn}>添加并行流程</div>
+          <div className={styles.btn}>保存流程</div>
           <div className={styles.btn}>删除流程</div>
         </div>
       </div>
