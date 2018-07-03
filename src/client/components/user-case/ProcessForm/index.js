@@ -2,14 +2,15 @@ import React from 'react';
 import styles from './style.scss';
 import {stopPropagation} from 'utils/common';
 import {getGlobalEvent} from 'utils/eventEmitter';
+import {connect} from 'react-redux';
+import actions from 'store/actions';
 
-export default class ProcessForm extends React.Component {
+class ProcessForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      formatType: 1,
-      showSelectPanel: false,
-      methodType: 'GET'
+      formatType: 1, // 1 x-www-url-encode 2 json
+      showSelectPanel: false // switch select panel
     };
   }
 
@@ -52,15 +53,14 @@ export default class ProcessForm extends React.Component {
 
   onSelectItemClick(e, type) {
     stopPropagation(e);
+    this.setState({
+      showSelectPanel: false
+    });
     if (type === 'cancle') {
-      this.setState({
-        showSelectPanel: false
-      });
+      return;
     } else {
-      this.setState({
-        showSelectPanel: false,
-        methodType: type
-      });
+      const {dispatch} = this.props;
+      dispatch(actions.setProcessMethod({method: type}));
     }
 
     if (type === 'GET') {
@@ -70,7 +70,56 @@ export default class ProcessForm extends React.Component {
     }
   }
 
+  addRow() {
+    const {dispatch} = this.props;
+    dispatch(actions.addRow());
+  }
+
+  deleteRow(i) {
+    const {dispatch} = this.props;
+    dispatch(actions.deleteProcessParam({row: i}));
+  }
+
+  onChange(e, i, type) {
+    const {dispatch} = this.props;
+    dispatch(actions.setProcessParam({row: i, type, value: e.target.value}));
+  }
+
+  getParamRows() {
+    const {processData} = this.props;
+    return processData.processes[processData.currentProcess].params;
+  }
+
+  buildParamsRow() {
+    const result = [];
+    const paramsRows = this.getParamRows();
+    for (let i = 0; i < paramsRows.length; i++) {
+      const item = paramsRows[i];
+      result.push(
+        <div className={styles.tr} key={i}>
+          <input className={styles.td} value={item.key || ''} onChange={(e) => this.onChange(e, i, 'key')} />
+          <input className={styles.td} value={item.value || ''} onChange={(e) => this.onChange(e, i, 'value')} />
+          <div className={[styles.td, styles.handler].join(' ')}>
+            <div className={styles.btn} onClick={() => this.addRow()} role="presentation">
+              添加
+            </div>
+            <div className={styles.btn} onClick={() => this.deleteRow(i)} role="presentation">
+              删除
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return result;
+  }
+
+  onJsonChange(e) {
+    const {dispatch} = this.props;
+    dispatch(actions.setProcessParamJson({json: e.target.value}));
+  }
+
   buildParamsArea() {
+    const process = this.getProcess();
     // x-www-form-urlencode
     if (this.state.formatType === 1) {
       return (
@@ -80,33 +129,50 @@ export default class ProcessForm extends React.Component {
             <input className={styles.th} disabled="disabled" value="Value" />
             <div className={styles.th}>操作</div>
           </div>
-          <div className={styles.tr}>
-            <input className={styles.td} />
-            <input className={styles.td} />
-            <div className={[styles.td, styles.handler].join(' ')}>
-              <div className={styles.btn}>添加</div>
-              <div className={styles.btn}>删除</div>
-            </div>
-          </div>
+          {this.buildParamsRow()}
         </div>
       );
     } else {
       return (
         <div className={styles.formItem}>
-          <textarea rows="10" cols="80" className={styles.jsonArea} />
+          <textarea
+            rows="10"
+            cols="80"
+            value={process.json}
+            className={styles.jsonArea}
+            onChange={(e) => this.onJsonChange(e)}
+          />
         </div>
       );
     }
   }
 
+  getProcess() {
+    const {processData} = this.props;
+    return processData.processes[processData.currentProcess];
+  }
+
+  setUrl(e) {
+    const {dispatch} = this.props;
+    dispatch(actions.setProcessUrl({url: e.target.value}));
+  }
+
+  addProcess(type) {
+    const {dispatch, processData} = this.props;
+    dispatch(actions.addProcess({type}));
+    dispatch(actions.setCurrentProcess(processData.currentProcess + 1));
+  }
+
   render() {
+    const process = this.getProcess();
+    console.log(process);
     return (
       <div className="wrap">
         <div className={styles.formItem}>
-          <label htmlFor="domain" className={styles.label}>
+          <label htmlFor="url" className={styles.label}>
             接口路径:
           </label>
-          <input name="domain" className={styles.input} />
+          <input name="url" className={styles.input} value={process.url || ''} onChange={(e) => this.setUrl(e)} />
         </div>
         <div className={styles.formItem}>
           <label htmlFor="method" className={styles.label}>
@@ -117,7 +183,7 @@ export default class ProcessForm extends React.Component {
               name="method"
               className={[styles.input, styles.method].join(' ')}
               disabled="disabled"
-              value={this.state.methodType}
+              value={process.method || 'GET'}
             />
             {this.state.showSelectPanel && (
               <div className={styles.selects}>
@@ -148,7 +214,7 @@ export default class ProcessForm extends React.Component {
         </div>
         <div className={styles.paramsWrap}>
           <label className={styles.label}>请求参数:</label>
-          {this.state.methodType === 'POST' && (
+          {process.method === 'POST' && (
             <div className={styles.formatType}>
               <div className={styles.radioWrap} onClick={() => this.onRadioClick(1)} role="presentation">
                 <div className={this.getRadioClassName(1)} name="formatType" />
@@ -163,12 +229,21 @@ export default class ProcessForm extends React.Component {
           {this.buildParamsArea()}
         </div>
         <div className={styles.btns}>
-          <div className={styles.btn}>添加串行流程</div>
-          <div className={styles.btn}>添加并行流程</div>
-          <div className={styles.btn}>保存流程</div>
+          <div className={styles.btn} onClick={() => this.addProcess(0)} role="presentation">
+            添加串行流程
+          </div>
+          <div className={styles.btn} onClick={() => this.addProcess(1)} role="presentation">
+            添加并行流程
+          </div>
           <div className={styles.btn}>删除流程</div>
         </div>
       </div>
     );
   }
 }
+
+function select(state) {
+  return state;
+}
+
+export default connect(select)(ProcessForm);
