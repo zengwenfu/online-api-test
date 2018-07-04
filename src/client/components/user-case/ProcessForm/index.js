@@ -158,21 +158,24 @@ class ProcessForm extends React.Component {
   }
 
   addProcess(type) {
-    const {dispatch, processData} = this.props;
+    const {dispatch} = this.props;
     dispatch(actions.addProcess({type}));
-    dispatch(actions.setCurrentProcess(processData.currentProcess + 1));
+  }
+
+  deleteProcess() {
+    const {dispatch} = this.props;
+    dispatch(actions.deleteProcess());
   }
 
   render() {
     const process = this.getProcess();
-    console.log(process);
     return (
       <div className="wrap">
         <div className={styles.formItem}>
-          <label htmlFor="url" className={styles.label}>
+          <label htmlFor="api" className={styles.label}>
             接口路径:
           </label>
-          <input name="url" className={styles.input} value={process.url || ''} onChange={(e) => this.setUrl(e)} />
+          <input name="api" className={styles.input} value={process.url || ''} onChange={(e) => this.setUrl(e)} />
         </div>
         <div className={styles.formItem}>
           <label htmlFor="method" className={styles.label}>
@@ -235,7 +238,9 @@ class ProcessForm extends React.Component {
           <div className={styles.btn} onClick={() => this.addProcess(1)} role="presentation">
             添加并行流程
           </div>
-          <div className={styles.btn}>删除流程</div>
+          <div className={styles.btn} onClick={() => this.deleteProcess()} role="presentation">
+            删除流程
+          </div>
         </div>
       </div>
     );

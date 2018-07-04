@@ -62,6 +62,12 @@ function addRow() {
   };
 }
 
+function deleteProcess() {
+  return {
+    type: types.DELETE_PROCESS
+  };
+}
+
 module.exports = {
   setGlobal,
   setProcessParam,
@@ -71,5 +77,6 @@ module.exports = {
   setProcessParamJson,
   addProcess,
   setCurrentProcess,
-  addRow
+  addRow,
+  deleteProcess
 };

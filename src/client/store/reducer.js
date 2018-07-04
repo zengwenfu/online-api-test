@@ -1,6 +1,7 @@
 const types = require('./action-types.js');
 const combineReducers = require('redux').combineReducers;
 const TYPE_SYNC = 1;
+const TYPE_ASYNC = 0;
 
 /**
  *
@@ -58,21 +59,40 @@ function _addRow(state) {
 
 function _addProcess(state, {type}) {
   const processes = state.processes.slice();
-  const nums = state.nums.slice();
-  processes.push({params: [{key: '', value: ''}]});
-  if (type === TYPE_SYNC) {
-    const current = nums[nums.length - 1];
-    if (current instanceof Array) {
-      current.push(1);
-    } else {
-      nums[nums.length - 1] = [1, 1];
+  // processes.push({params: [{key: '', value: ''}], type});
+  processes.splice(state.currentProcess + 1, 0, {params: [{key: '', value: ''}], type});
+  return {
+    processes,
+    currentProcess: state.currentProcess + 1
+  };
+}
+
+function _deleteProcess(state) {
+  const processes = state.processes.slice();
+  let currentProcess = 0;
+  if (state.processes.length > 1) {
+    // 删除的是并行接口的头一个，重置下一个的type
+    if (state.currentProcess === 0 || processes[state.currentProcess - 1].type === TYPE_ASYNC) {
+      if (state.currentProcess + 1 < state.processes.length) {
+        processes[state.currentProcess + 1].type = TYPE_ASYNC;
+      }
     }
+    processes.splice(state.currentProcess, 1);
+    currentProcess = state.currentProcess - 1 >= 0 ? state.currentProcess - 1 : 0;
   } else {
-    nums.push(1);
+    processes[0] = {
+      params: [
+        {
+          key: '',
+          value: ''
+        }
+      ],
+      type: TYPE_ASYNC
+    };
   }
   return {
     processes,
-    nums
+    currentProcess
   };
 }
 
@@ -84,10 +104,10 @@ const _state = {
           key: '',
           value: ''
         }
-      ]
+      ],
+      type: TYPE_ASYNC
     }
   ],
-  nums: [1],
   currentProcess: 0
 };
 
@@ -116,8 +136,10 @@ function processData(state = _state, action) {
         processes: _setProcessParamJson(state, action.data)
       });
     case types.ADD_PROCESS:
+      const obj = _addProcess(state, action.data);
       return Object.assign({}, state, {
-        ..._addProcess(state, action.data)
+        processes: obj.processes,
+        currentProcess: obj.currentProcess
       });
     case types.SET_CURRENT_PROCESS:
       return Object.assign({}, state, {
@@ -126,6 +148,10 @@ function processData(state = _state, action) {
     case types.ADD_ROW:
       return Object.assign({}, state, {
         processes: _addRow(state)
+      });
+    case types.DELETE_PROCESS:
+      return Object.assign({}, state, {
+        ..._deleteProcess(state)
       });
     default:
       return state;
