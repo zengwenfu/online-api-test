@@ -1,3 +1,2 @@
-export const APP_URL = 'https://itunes.apple.com/app/id1396523004';
-export const LOGO_URL = require('assets/logo.png');
-export const GET_API_URL = '/instaclip/v1/get';
+export const PROCESS_TYPE_PARALLEL = 1;
+export const PROCESS_TYPE_SERIAL = 0;

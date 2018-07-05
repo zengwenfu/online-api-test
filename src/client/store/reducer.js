@@ -1,7 +1,6 @@
 const types = require('./action-types.js');
 const combineReducers = require('redux').combineReducers;
-const TYPE_SYNC = 1;
-const TYPE_ASYNC = 0;
+const {PROCESS_TYPE_SERIAL} = require('../utils/constants');
 
 /**
  *
@@ -72,9 +71,9 @@ function _deleteProcess(state) {
   let currentProcess = 0;
   if (state.processes.length > 1) {
     // 删除的是并行接口的头一个，重置下一个的type
-    if (state.currentProcess === 0 || processes[state.currentProcess - 1].type === TYPE_ASYNC) {
+    if (state.currentProcess === 0 || processes[state.currentProcess - 1].type === PROCESS_TYPE_SERIAL) {
       if (state.currentProcess + 1 < state.processes.length) {
-        processes[state.currentProcess + 1].type = TYPE_ASYNC;
+        processes[state.currentProcess + 1].type = PROCESS_TYPE_SERIAL;
       }
     }
     processes.splice(state.currentProcess, 1);
@@ -87,7 +86,7 @@ function _deleteProcess(state) {
           value: ''
         }
       ],
-      type: TYPE_ASYNC
+      type: PROCESS_TYPE_SERIAL
     };
   }
   return {
@@ -105,7 +104,7 @@ const _state = {
           value: ''
         }
       ],
-      type: TYPE_ASYNC
+      type: PROCESS_TYPE_SERIAL
     }
   ],
   currentProcess: 0

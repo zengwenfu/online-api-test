@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './style.scss';
 import {connect} from 'react-redux';
 import actions from 'store/actions';
+import {PROCESS_TYPE_SERIAL} from 'utils/constants';
 
 class ProcessLine extends React.Component {
   buildGroupNode(data, current) {
@@ -38,7 +39,7 @@ class ProcessLine extends React.Component {
     const {processes} = this.props.processData;
     for (let i = 0; i < processes.length; i++) {
       const process = processes[i];
-      if (process.type === 0) {
+      if (process.type === PROCESS_TYPE_SERIAL) {
         nums.push(1);
       } else {
         if (nums[nums.length - 1] instanceof Array) {

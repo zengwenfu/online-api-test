@@ -4,6 +4,7 @@ import {stopPropagation} from 'utils/common';
 import {getGlobalEvent} from 'utils/eventEmitter';
 import {connect} from 'react-redux';
 import actions from 'store/actions';
+import {PROCESS_TYPE_SERIAL, PROCESS_TYPE_PARALLEL} from 'utils/constants';
 
 class ProcessForm extends React.Component {
   constructor(props) {
@@ -232,10 +233,10 @@ class ProcessForm extends React.Component {
           {this.buildParamsArea()}
         </div>
         <div className={styles.btns}>
-          <div className={styles.btn} onClick={() => this.addProcess(0)} role="presentation">
+          <div className={styles.btn} onClick={() => this.addProcess(PROCESS_TYPE_SERIAL)} role="presentation">
             添加串行流程
           </div>
-          <div className={styles.btn} onClick={() => this.addProcess(1)} role="presentation">
+          <div className={styles.btn} onClick={() => this.addProcess(PROCESS_TYPE_PARALLEL)} role="presentation">
             添加并行流程
           </div>
           <div className={styles.btn} onClick={() => this.deleteProcess()} role="presentation">
