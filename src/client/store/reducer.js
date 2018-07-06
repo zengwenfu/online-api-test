@@ -1,6 +1,6 @@
 const types = require('./action-types.js');
 const combineReducers = require('redux').combineReducers;
-const {PROCESS_TYPE_SERIAL} = require('../utils/constants');
+const {PROCESS_TYPE_SERIAL, PROCESS_FORMAT_URLENCODE} = require('../utils/constants');
 
 /**
  *
@@ -42,6 +42,13 @@ function _setProcessMethod(state, {method}) {
   return result;
 }
 
+function _setFormatType(state, formatType) {
+  const result = state.processes.slice();
+  const process = result[state.currentProcess];
+  process.formatType = formatType;
+  return result;
+}
+
 function _setProcessParamJson(state, {json}) {
   const result = state.processes.slice();
   const process = result[state.currentProcess];
@@ -58,8 +65,8 @@ function _addRow(state) {
 
 function _addProcess(state, {type}) {
   const processes = state.processes.slice();
-  // processes.push({params: [{key: '', value: ''}], type});
-  processes.splice(state.currentProcess + 1, 0, {params: [{key: '', value: ''}], type});
+  const initProcess = {params: [{key: '', value: ''}], type, formatType: PROCESS_FORMAT_URLENCODE};
+  processes.splice(state.currentProcess + 1, 0, initProcess);
   return {
     processes,
     currentProcess: state.currentProcess + 1
@@ -86,7 +93,8 @@ function _deleteProcess(state) {
           value: ''
         }
       ],
-      type: PROCESS_TYPE_SERIAL
+      type: PROCESS_TYPE_SERIAL,
+      formatType: PROCESS_FORMAT_URLENCODE
     };
   }
   return {
@@ -104,7 +112,8 @@ const _state = {
           value: ''
         }
       ],
-      type: PROCESS_TYPE_SERIAL
+      type: PROCESS_TYPE_SERIAL,
+      formatType: PROCESS_FORMAT_URLENCODE
     }
   ],
   currentProcess: 0
@@ -151,6 +160,10 @@ function processData(state = _state, action) {
     case types.DELETE_PROCESS:
       return Object.assign({}, state, {
         ..._deleteProcess(state)
+      });
+    case types.SET_FORMAT_TYPE:
+      return Object.assign({}, state, {
+        ..._setFormatType(state, action.formatType)
       });
     default:
       return state;

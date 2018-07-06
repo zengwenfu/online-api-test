@@ -4,13 +4,17 @@ import {stopPropagation} from 'utils/common';
 import {getGlobalEvent} from 'utils/eventEmitter';
 import {connect} from 'react-redux';
 import actions from 'store/actions';
-import {PROCESS_TYPE_SERIAL, PROCESS_TYPE_PARALLEL} from 'utils/constants';
+import {
+  PROCESS_TYPE_SERIAL,
+  PROCESS_TYPE_PARALLEL,
+  PROCESS_FORMAT_URLENCODE,
+  PROCESS_FORMAT_JSON
+} from 'utils/constants';
 
 class ProcessForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      formatType: 1, // 1 x-www-url-encode 2 json
       showSelectPanel: false // switch select panel
     };
   }
@@ -33,16 +37,16 @@ class ProcessForm extends React.Component {
 
   getRadioClassName(value) {
     const classes = [styles.radio];
-    if (this.state.formatType === value) {
+    const {formatType} = this.getProcess();
+    if (formatType === value) {
       classes.push(styles.checked);
     }
     return classes.join(' ');
   }
 
   onRadioClick(value) {
-    this.setState({
-      formatType: value
-    });
+    const {dispatch} = this.props;
+    dispatch(actions.setFormatType(value));
   }
 
   onMethodClick(e) {
@@ -54,6 +58,7 @@ class ProcessForm extends React.Component {
 
   onSelectItemClick(e, type) {
     stopPropagation(e);
+    const {dispatch} = this.props;
     this.setState({
       showSelectPanel: false
     });
@@ -65,9 +70,7 @@ class ProcessForm extends React.Component {
     }
 
     if (type === 'GET') {
-      this.setState({
-        formatType: 1
-      });
+      dispatch(actions.setFormatType(PROCESS_FORMAT_URLENCODE))
     }
   }
 
@@ -122,7 +125,7 @@ class ProcessForm extends React.Component {
   buildParamsArea() {
     const process = this.getProcess();
     // x-www-form-urlencode
-    if (this.state.formatType === 1) {
+    if (process.formatType === PROCESS_FORMAT_URLENCODE) {
       return (
         <div className={styles.table}>
           <div className={styles.tr}>
@@ -220,11 +223,19 @@ class ProcessForm extends React.Component {
           <label className={styles.label}>请求参数:</label>
           {process.method === 'POST' && (
             <div className={styles.formatType}>
-              <div className={styles.radioWrap} onClick={() => this.onRadioClick(1)} role="presentation">
+              <div
+                className={styles.radioWrap}
+                onClick={() => this.onRadioClick(PROCESS_FORMAT_URLENCODE)}
+                role="presentation"
+              >
                 <div className={this.getRadioClassName(1)} name="formatType" />
                 <p className={styles.ftDesc}>x-www-form-urlencoded</p>
               </div>
-              <div className={styles.radioWrap} onClick={() => this.onRadioClick(2)} role="presentation">
+              <div
+                className={styles.radioWrap}
+                onClick={() => this.onRadioClick(PROCESS_FORMAT_JSON)}
+                role="presentation"
+              >
                 <div className={this.getRadioClassName(2)} name="formatType" value="2" />
                 <p className={styles.ftDesc}>json</p>
               </div>

@@ -68,6 +68,13 @@ function deleteProcess() {
   };
 }
 
+function setFormatType(type) {
+  return {
+    type: types.SET_FORMAT_TYPE,
+    formatType: type
+  };
+}
+
 module.exports = {
   setGlobal,
   setProcessParam,
@@ -78,5 +85,6 @@ module.exports = {
   addProcess,
   setCurrentProcess,
   addRow,
-  deleteProcess
+  deleteProcess,
+  setFormatType
 };
