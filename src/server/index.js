@@ -5,6 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const setupApiRoutes = require('./middlewares/api');
 const logger = require('./logger');
+const session = require('express-session');
 const {envConfig, httpsConst} = require('./../../config/application.config');
 const proxy = require('http-proxy-middleware');
 
@@ -50,6 +51,7 @@ app.use('/instaclip', proxy({target: 'https://api.instclip.com', changeOrigin: t
 app.use(logger.expressMiddleware);
 app.use(bodyParser.json());
 app.use(invalidReqHandling);
+app.use(session({secret: 'recommand 128 bytes random string'}));
 
 // application routes
 setupApiRoutes(app);
