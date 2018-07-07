@@ -1,13 +1,13 @@
-const fs = require('fs');
 const http = require('http');
-const https = require('https');
 const express = require('express');
 const bodyParser = require('body-parser');
 const setupApiRoutes = require('./middlewares/api');
 const logger = require('./logger');
 const session = require('express-session');
-const {envConfig, httpsConst} = require('./../../config/application.config');
+const {envConfig} = require('./../../config/application.config');
 const proxy = require('http-proxy-middleware');
+const ws = require('ws');
+const {wsConn} = require('./middlewares/ws.js');
 
 function onUnhandledError(err) {
   try {
@@ -23,17 +23,6 @@ function invalidReqHandling(err, req, res, next) {
   const ipaddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   logger.error(`IP: ${ipaddr} -- ${err.message}`);
   res.status(500).send('500');
-}
-
-function approveDomains(opts, certs, cb) {
-  if (certs) {
-    //opts.domains = httpsConst.hostNameArray;
-    opts.domains = certs.altnames;
-  } else {
-    opts.email = httpsConst.emailUser;
-    opts.agreeTos = true;
-  }
-  cb(null, {options: opts, certs});
 }
 
 process.on('unhandledRejection', onUnhandledError);
@@ -57,37 +46,16 @@ app.use(session({secret: 'recommand 128 bytes random string'}));
 setupApiRoutes(app);
 setupAppRoutes(app);
 
-let https_options;
-let lex;
-//Get SSL required certificates
-if (envConfig.nodeEnv === 'production') {
-  lex = require('greenlock-express').create({
-    version: 'draft-11',
-    // You MUST change 'acme-staging-v02' to 'acme-v02' in production
-    server: 'https://acme-v02.api.letsencrypt.org/directory',
-    challenges: {'http-01': require('le-challenge-fs').create({webrootPath: '/tmp/acme-challenges'})},
-    store: require('le-store-certbot').create({webrootPath: '/tmp/acme-challenges'}),
-    approveDomains
-  });
+const server = http.createServer(app);
 
-  http.createServer(lex.middleware(require('redirect-https')())).listen(envConfig.httpPort, () => {
-    logger.info(`HTTP server is now running on port: ${envConfig.httpPort}`);
-  });
+const WebSocketServer = ws.Server;
 
-  https.createServer(lex.httpsOptions, lex.middleware(app)).listen(envConfig.httpsPort, () => {
-    logger.info(`HTTPS server is now running on port: ${envConfig.httpsPort}`);
-  });
-} else {
-  https_options = {
-    key: fs.readFileSync('./.ssl/private.key'),
-    cert: fs.readFileSync('./.ssl/certificate.pem')
-  };
+const wss = new WebSocketServer({server});
 
-  http.createServer(app).listen(envConfig.httpPort, () => {
-    logger.info(`HTTP server is now running on port: ${envConfig.httpPort}`);
-  });
+process.wsMap = {};
 
-  https.createServer(https_options, app).listen(envConfig.httpsPort, () => {
-    logger.info(`HTTPS server is now running on port: ${envConfig.httpsPort}`);
-  });
-}
+wsConn(wss);
+
+server.listen(envConfig.httpPort, () => {
+  logger.info(`HTTP server is now running on port: ${envConfig.httpPort}`);
+});

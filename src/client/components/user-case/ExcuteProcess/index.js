@@ -3,6 +3,7 @@ import styles from './style.scss';
 import ProcessLine from 'components/user-case/ProcessLine';
 import {connect} from 'react-redux';
 import {PROCESS_TYPE_SERIAL, PROCESS_FORMAT_URLENCODE} from 'utils/constants';
+import {sendProcess} from 'utils/ws-conn';
 
 class ExcuteProcess extends React.Component {
   parseParams(params) {
@@ -50,6 +51,7 @@ class ExcuteProcess extends React.Component {
   excute() {
     const data = this.buildData();
     console.log(data);
+    sendProcess(data);
   }
 
   render() {
