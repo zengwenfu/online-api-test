@@ -29,6 +29,7 @@ export default class EventEmitter {
             break;
           }
         }
+        console.log(index)
         if (index !== -1) {
           this._events[event].splice(index, 1);
         }

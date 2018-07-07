@@ -3,16 +3,14 @@
   justify-content: center;
 }
 
-.form {
+.main {
   margin-top: 20px;
-  padding: 0 20px 20px 20px;
+  padding: 20px;
   background-color: #fff;
   box-sizing: border-box;
   flex-direction: column;
-}
-
-.global-set, .process-set {
-  width: 100%;
+  display: flex;
+  width: 960px;
 }
 
 .title {
@@ -21,27 +19,13 @@
   border-bottom: 1px solid #244c76;
   margin-bottom: 25px;
   width: 100%;
-}
-
-.form-item {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.label {
-  color: #71777c;
-  font-size: 16px;
-  line-height: 30px;
-  margin-right: 20px;
-  width: 70px;
-}
-
-.input {
-  height: 40px;
-  width: 400px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  padding-left: 10px;
+.title h2 {
+  font-size: 18px;
 }
 
 .btn {
@@ -54,6 +38,4 @@
   line-height: 30px;
   font-size: 14px;
   cursor: pointer;
-  align-self: center;
-  margin-left: 20px;
 }

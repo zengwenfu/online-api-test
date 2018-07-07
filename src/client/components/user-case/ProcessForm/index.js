@@ -27,12 +27,13 @@ class ProcessForm extends React.Component {
 
   componentDidMount() {
     const globalEvent = getGlobalEvent();
-    globalEvent.on('containerClick', this.onContainerClick.bind(this));
+    this._func = this.onContainerClick.bind(this);
+    globalEvent.on('containerClick', this._func);
   }
 
   componentWillUnmount() {
     const globalEvent = getGlobalEvent();
-    globalEvent.off('containerClick', this.onContainerClick);
+    globalEvent.off('containerClick', this._func);
   }
 
   getRadioClassName(value) {

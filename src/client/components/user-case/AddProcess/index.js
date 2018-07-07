@@ -8,10 +8,6 @@ import actions from 'store/actions';
 class AddProcess extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      data: [1],
-      current: 1
-    };
   }
 
   setGlobal(e) {
@@ -42,7 +38,7 @@ class AddProcess extends React.Component {
           </div>
           <div className={styles.processSet}>
             <h2 className={styles.title}>流程配置</h2>
-            <ProcessLine data={this.state.data} current={this.state.current} />
+            <ProcessLine />
             <ProcessForm />
           </div>
         </div>

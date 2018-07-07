@@ -60,7 +60,7 @@ function _setProcessParamJson(state, {json}) {
   const result = state.processes.slice();
   const process = result[state.currentProcess];
   process.json = json;
-  return json;
+  return result;
 }
 
 function _addRow(state) {
@@ -123,7 +123,9 @@ const _state = {
       formatType: PROCESS_FORMAT_URLENCODE
     }
   ],
-  currentProcess: 0
+  domain: false,
+  currentProcess: 0,
+  currentExcute: -1
 };
 
 function processData(state = _state, action) {
