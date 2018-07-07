@@ -27,8 +27,8 @@ class FreedomApi {
   }
 
   afterRequestPlugin(processRule) {
-    processRule.hooks.afterRequest.tapPromise('afterRequest', (data, options) => {
-      this.client.send(buildMsg(TYPE_AFTER_REQUEST, {data, index: options.index}));
+    processRule.hooks.afterRequest.tapPromise('afterRequest', (data, options, assert) => {
+      this.client.send(buildMsg(TYPE_AFTER_REQUEST, {data, index: options.index, assert}));
       return new Promise((resolve) => {
         resolve(data);
       });

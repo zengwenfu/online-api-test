@@ -1,6 +1,12 @@
 const types = require('./action-types.js');
 const combineReducers = require('redux').combineReducers;
-const {PROCESS_TYPE_SERIAL, PROCESS_FORMAT_URLENCODE, PROCESS_STATUS_DOING, PROCESS_STATUS_DONE} = require('../utils/constants');
+const {
+  PROCESS_TYPE_SERIAL,
+  PROCESS_FORMAT_URLENCODE,
+  PROCESS_STATUS_DOING,
+  PROCESS_STATUS_DONE,
+  PROCESS_STATUS_FAIL
+} = require('../utils/constants');
 const {getMockProcess, getDomain} = require('../utils/mock');
 /**
  *
@@ -94,10 +100,14 @@ function _setRequestOptions(state, {index, options}) {
   };
 }
 
-function _setRequestResult(state, {index, data}) {
+function _setRequestResult(state, {index, data, assert}) {
   const results = state.results.slice();
   const finished = Object.assign({}, state.finished);
-  finished[index] = PROCESS_STATUS_DONE;
+  if (assert) {
+    finished[index] = PROCESS_STATUS_DONE;
+  } else {
+    finished[index] = PROCESS_STATUS_FAIL;
+  }
   results.push({
     index,
     data
@@ -225,6 +235,11 @@ function processData(state = _state, action) {
     case types.SET_REQUEST_RESULT:
       return Object.assign({}, state, {
         ..._setRequestResult(state, action.data)
+      });
+    case types.RESET_REQUEST:
+      return Object.assign({}, state, {
+        finished: {},
+        results: []
       });
     default:
       return state;

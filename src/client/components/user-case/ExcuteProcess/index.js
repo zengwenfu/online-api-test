@@ -4,6 +4,7 @@ import ProcessLine from 'components/user-case/ProcessLine';
 import {connect} from 'react-redux';
 import {PROCESS_TYPE_SERIAL, PROCESS_FORMAT_URLENCODE} from 'utils/constants';
 import {sendProcess} from 'utils/ws-conn';
+import actions from 'store/actions';
 
 class ExcuteProcess extends React.Component {
   parseParams(params) {
@@ -52,7 +53,50 @@ class ExcuteProcess extends React.Component {
   excute() {
     const data = this.buildData();
     const {dispatch} = this.props;
+    dispatch(actions.resetRequest());
     sendProcess(data, dispatch);
+  }
+
+  buildObjItem(obj) {
+    const result = [];
+    for (const key in obj) {
+      result.push(
+        <p key={key}>
+          {key}: {JSON.stringify(obj[key])}
+        </p>
+      );
+    }
+    return result;
+  }
+
+  buildClipItem(title, obj, i, isBody = false) {
+    return (
+      <div className={styles.itemWrap} key={i}>
+        <h3>{title}</h3>
+        {!isBody && this.buildObjItem(obj)}
+        {isBody && <p>{JSON.stringify(obj)}</p>}
+      </div>
+    );
+  }
+
+  buildLog() {
+    const {results, processes} = this.props.processData;
+    const obj = [];
+    for (let i = 0; i < results.length; i++) {
+      const result = results[i];
+      console.log(result);
+      const name = processes[result.index].name;
+      if (result.options) {
+        const title = `流程（${name}）请求参数:`;
+        obj.push(this.buildClipItem(title, result.options, i));
+      } else if (result.data) {
+        const hTitle = `流程（${name}）响应 Header:`;
+        obj.push(this.buildClipItem(hTitle, result.data.headers, `h${i}`));
+        const bTitle = `流程（${name}）响应 Body:`;
+        obj.push(this.buildClipItem(bTitle, result.data.body, `b${i}`, true));
+      }
+    }
+    return obj;
   }
 
   render() {
@@ -69,7 +113,8 @@ class ExcuteProcess extends React.Component {
               </div>
             </div>
           </div>
-          <textarea rows="30" cols="80" value={process.json} className={styles.jsonArea} disabled="true" />
+          {/* <textarea rows="30" cols="80" value={process.json} className={styles.jsonArea} disabled="true" /> */}
+          <div className={styles.logCon}>{this.buildLog()}</div>
         </div>
       </div>
     );

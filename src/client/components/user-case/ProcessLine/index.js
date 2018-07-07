@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './style.scss';
 import {connect} from 'react-redux';
 import actions from 'store/actions';
-import {PROCESS_TYPE_SERIAL, PROCESS_STATUS_DOING} from 'utils/constants';
+import {PROCESS_TYPE_SERIAL, PROCESS_STATUS_DOING, PROCESS_STATUS_FAIL} from 'utils/constants';
 
 class ProcessLine extends React.Component {
   buildGroupNode(data) {
@@ -67,6 +67,8 @@ class ProcessLine extends React.Component {
         return styles.num;
       } else if (finished[index] === PROCESS_STATUS_DOING) {
         return [styles.num, styles.doing].join(' ');
+      } else if (finished[index] === PROCESS_STATUS_FAIL) {
+        return [styles.num, styles.fail].join(' ');
       } else {
         return [styles.num, styles.selected].join(' ');
       }

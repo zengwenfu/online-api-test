@@ -39,3 +39,19 @@
   font-size: 14px;
   cursor: pointer;
 }
+
+.log-con {
+  border: 1px #ccc solid;
+  padding: 10px;
+  color: #666;
+  height: 350px;
+  overflow: auto;
+}
+
+.item-wrap {
+  margin-bottom: 20px;
+}
+
+.item-wrap h3 {
+  font-size: 14px;
+}

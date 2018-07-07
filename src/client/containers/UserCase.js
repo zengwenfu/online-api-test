@@ -7,6 +7,7 @@ import Header from 'components/common/Header';
 import AddProcess from 'components/user-case/AddProcess';
 import ExcuteProcess from 'components/user-case/ExcuteProcess';
 import {getGlobalEvent} from 'utils/eventEmitter';
+import actions from 'store/actions';
 
 class UseCase extends React.Component {
   constructor(props) {
@@ -30,6 +31,8 @@ class UseCase extends React.Component {
     this.setState({
       current: index
     });
+    const {dispatch} = this.props;
+    dispatch(actions.resetRequest());
   }
 
   onContainerClick() {

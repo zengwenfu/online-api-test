@@ -102,6 +102,12 @@ function setRequestResult(data) {
   };
 }
 
+function resetRequest() {
+  return {
+    type: types.RESET_REQUEST
+  };
+}
+
 module.exports = {
   setGlobal,
   setProcessParam,
@@ -117,5 +123,6 @@ module.exports = {
   setName,
   setDemoData,
   setRequestOptions,
-  setRequestResult
+  setRequestResult,
+  resetRequest
 };
