@@ -171,10 +171,32 @@ class ProcessForm extends React.Component {
     dispatch(actions.deleteProcess());
   }
 
+  setName(e) {
+    const {dispatch} = this.props;
+    const value = e.target.value;
+    if (value.length > 10) return;
+    const reg = /^[A-Za-z0-9]+$/;
+    if (reg.test(value) || value === '') {
+      dispatch(actions.setName(value));
+    }
+  }
+
   render() {
     const process = this.getProcess();
     return (
       <div className="wrap">
+        <div className={styles.formItem}>
+          <label htmlFor="key" className={styles.label}>
+            流程名:
+          </label>
+          <input
+            placeholder="请输入流程的唯一英文Key"
+            name="key"
+            className={styles.input}
+            value={process.name || ''}
+            onChange={(e) => this.setName(e)}
+          />
+        </div>
         <div className={styles.formItem}>
           <label htmlFor="api" className={styles.label}>
             接口路径:

@@ -35,6 +35,13 @@ function _setProcessUrl(state, {url}) {
   return result;
 }
 
+function _setName(state, name) {
+  const result = state.processes.slice();
+  const process = result[state.currentProcess];
+  process.name = name;
+  return result;
+}
+
 function _setProcessMethod(state, {method}) {
   const result = state.processes.slice();
   const process = result[state.currentProcess];
@@ -164,6 +171,10 @@ function processData(state = _state, action) {
     case types.SET_FORMAT_TYPE:
       return Object.assign({}, state, {
         ..._setFormatType(state, action.formatType)
+      });
+    case types.SET_NAME:
+      return Object.assign({}, state, {
+        ..._setName(state, action.name)
       });
     default:
       return state;

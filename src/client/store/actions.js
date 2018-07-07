@@ -75,6 +75,13 @@ function setFormatType(type) {
   };
 }
 
+function setName(name) {
+  return {
+    type: types.SET_NAME,
+    name
+  };
+}
+
 module.exports = {
   setGlobal,
   setProcessParam,
@@ -86,5 +93,6 @@ module.exports = {
   setCurrentProcess,
   addRow,
   deleteProcess,
-  setFormatType
+  setFormatType,
+  setName
 };

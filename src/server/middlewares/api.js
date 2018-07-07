@@ -25,6 +25,7 @@ module.exports = function setup(app) {
     if (body.name === 'facemagic' && body.pass === 'facemagic888') {
       req.session.login = true;
       res.send(JSON.stringify({code: 0, login: true}));
+      return;
     }
     res.send(JSON.stringify({code: 0, login: false}));
   });
