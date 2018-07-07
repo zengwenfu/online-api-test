@@ -4,6 +4,10 @@ let websocket;
 let processData;
 const TYPE_RELA = 'rela';
 const TYPE_PROCESS = 'process';
+const TYPE_BEFORE_REQUEST = 'breq';
+const TYPE_AFTER_REQUEST = 'areq';
+import actions from 'store/actions';
+let dispatch;
 
 function buildMsg(data, type) {
   return JSON.stringify({
@@ -27,8 +31,11 @@ function receiveMsg(evt) {
       if (processData) {
         websocket.send(buildMsg(processData, TYPE_PROCESS));
       }
+    } else if (data.type === TYPE_BEFORE_REQUEST) {
+      dispatch(actions.setRequestOptions(data.data));
+    } else if (data.type === TYPE_AFTER_REQUEST) {
+      dispatch(actions.setRequestResult(data.data));
     }
-    console.log(data);
   } catch (e) {
     console.log(e);
     console.log('msg parse error');
@@ -46,7 +53,8 @@ export function conn({onOpen, onClose, onMessage, onError}) {
   websocket.onerror = onError || buildDefaultCb('onError');
 }
 
-export function sendProcess(data) {
+export function sendProcess(data, disp) {
+  dispatch = disp;
   processData = data;
   if (!websocket) {
     conn({});

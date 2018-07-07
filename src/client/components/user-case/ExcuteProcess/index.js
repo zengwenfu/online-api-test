@@ -35,6 +35,7 @@ class ExcuteProcess extends React.Component {
       } else {
         process.params = false;
       }
+      process.index = i;
       if (process.type === PROCESS_TYPE_SERIAL) {
         result.push(process);
       } else {
@@ -50,8 +51,8 @@ class ExcuteProcess extends React.Component {
 
   excute() {
     const data = this.buildData();
-    console.log(data);
-    sendProcess(data);
+    const {dispatch} = this.props;
+    sendProcess(data, dispatch);
   }
 
   render() {

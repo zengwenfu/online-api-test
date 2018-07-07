@@ -88,6 +88,20 @@ function setDemoData() {
   };
 }
 
+function setRequestOptions(data) {
+  return {
+    type: types.SET_REQUEST_OPTIONS,
+    data
+  };
+}
+
+function setRequestResult(data) {
+  return {
+    type: types.SET_REQUEST_RESULT,
+    data
+  };
+}
+
 module.exports = {
   setGlobal,
   setProcessParam,
@@ -101,5 +115,7 @@ module.exports = {
   deleteProcess,
   setFormatType,
   setName,
-  setDemoData
+  setDemoData,
+  setRequestOptions,
+  setRequestResult
 };

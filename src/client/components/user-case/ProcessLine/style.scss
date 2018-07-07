@@ -12,10 +12,18 @@
   line-height: 35px;
   margin-right: 30px;
   color: #fff;
+  box-sizing: border-box;
 }
 
 .selected {
   background-color: #244c76;
+}
+
+.doing {
+  background-color: #ccc;
+  border: 3px solid #244c76;
+  box-sizing: border-box;
+  line-height: 29px;
 }
 
 .num-group div {

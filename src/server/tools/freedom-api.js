@@ -17,18 +17,18 @@ class FreedomApi {
     this.client = process.wsMap[this.rela];
   }
 
-  beforeRequestPlugin(processRule) {
-    processRule.hooks.beforeRequest.tapPromise('beforeRequest', (options) => {
-      this.client.send(buildMsg(TYPE_BEFORE_REQUEST, options));
+  afterDueOptionPlugin(processRule) {
+    processRule.hooks.afterDueOption.tapPromise('afterDueOption', (reqOptions, options) => {
+      this.client.send(buildMsg(TYPE_BEFORE_REQUEST, {options: reqOptions, index: options.index}));
       return new Promise((resolve) => {
-        resolve(options);
+        resolve(reqOptions);
       });
     });
   }
 
   afterRequestPlugin(processRule) {
-    processRule.hooks.afterRequest.tapPromise('afterRequest', (data) => {
-      this.client.send(buildMsg(TYPE_AFTER_REQUEST, data));
+    processRule.hooks.afterRequest.tapPromise('afterRequest', (data, options) => {
+      this.client.send(buildMsg(TYPE_AFTER_REQUEST, {data, index: options.index}));
       return new Promise((resolve) => {
         resolve(data);
       });
@@ -39,7 +39,7 @@ class FreedomApi {
     const client = this.client;
     fApi({
       processes: this.processes,
-      plugins: [this.beforeRequestPlugin.bind(this), this.afterRequestPlugin.bind(this)],
+      plugins: [this.afterDueOptionPlugin.bind(this), this.afterRequestPlugin.bind(this)],
       callback: function(data) {
         client.send(buildMsg(TYPE_RESULT, data));
       }

@@ -23,7 +23,8 @@ export function getMockProcess() {
         pass: 'facemagic888'
       }),
       type: PROCESS_TYPE_SERIAL,
-      formatType: PROCESS_FORMAT_JSON
+      formatType: PROCESS_FORMAT_JSON,
+      params: [{}]
     },
     {
       url: `/testFApi/getList`,

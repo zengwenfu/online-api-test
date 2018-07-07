@@ -1,6 +1,6 @@
 const types = require('./action-types.js');
 const combineReducers = require('redux').combineReducers;
-const {PROCESS_TYPE_SERIAL, PROCESS_FORMAT_URLENCODE} = require('../utils/constants');
+const {PROCESS_TYPE_SERIAL, PROCESS_FORMAT_URLENCODE, PROCESS_STATUS_DOING, PROCESS_STATUS_DONE} = require('../utils/constants');
 const {getMockProcess, getDomain} = require('../utils/mock');
 /**
  *
@@ -80,6 +80,34 @@ function _addProcess(state, {type}) {
   };
 }
 
+function _setRequestOptions(state, {index, options}) {
+  const results = state.results.slice();
+  const finished = Object.assign({}, state.finished);
+  finished[index] = PROCESS_STATUS_DOING;
+  results.push({
+    index,
+    options
+  });
+  return {
+    results,
+    finished
+  };
+}
+
+function _setRequestResult(state, {index, data}) {
+  const results = state.results.slice();
+  const finished = Object.assign({}, state.finished);
+  finished[index] = PROCESS_STATUS_DONE;
+  results.push({
+    index,
+    data
+  });
+  return {
+    results,
+    finished
+  };
+}
+
 function _deleteProcess(state) {
   const processes = state.processes.slice();
   let currentProcess = 0;
@@ -126,7 +154,9 @@ const _state = {
   ],
   domain: false,
   currentProcess: 0,
-  currentExcute: -1
+  currentExcute: -1,
+  finished: {},
+  results: []
 };
 
 function processData(state = _state, action) {
@@ -184,8 +214,18 @@ function processData(state = _state, action) {
         currentProcess: 0,
         currentExcute: -1,
         domain: getDomain(),
-        processes: getMockProcess()
+        processes: getMockProcess(),
+        finished: {},
+        results: []
       };
+    case types.SET_REQUEST_OPTIONS:
+      return Object.assign({}, state, {
+        ..._setRequestOptions(state, action.data)
+      });
+    case types.SET_REQUEST_RESULT:
+      return Object.assign({}, state, {
+        ..._setRequestResult(state, action.data)
+      });
     default:
       return state;
   }

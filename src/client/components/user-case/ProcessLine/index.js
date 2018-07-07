@@ -2,17 +2,14 @@ import React from 'react';
 import styles from './style.scss';
 import {connect} from 'react-redux';
 import actions from 'store/actions';
-import {PROCESS_TYPE_SERIAL} from 'utils/constants';
+import {PROCESS_TYPE_SERIAL, PROCESS_STATUS_DOING} from 'utils/constants';
 
 class ProcessLine extends React.Component {
   buildGroupNode(data) {
     const showType = this.props.showType || 'add';
     const result = [];
     for (let i = 0; i < data.length; i++) {
-      let className = styles.num;
-      if (this.isSelected(this._index - 1)) {
-        className = `${className} ${styles.selected}`;
-      }
+      const className = this.getItemClass(this._index - 1);
       result.push(
         <div
           className={className}
@@ -56,13 +53,23 @@ class ProcessLine extends React.Component {
     return nums;
   }
 
-  isSelected(index) {
-    const {currentProcess, currentExcute} = this.props.processData;
+  getItemClass(index) {
+    const {currentProcess, finished} = this.props.processData;
     const showType = this.props.showType || 'add';
     if (showType === 'add') {
-      return index === currentProcess;
+      if (index === currentProcess) {
+        return [styles.num, styles.selected].join(' ');
+      } else {
+        return styles.num;
+      }
     } else {
-      return index <= currentExcute;
+      if (!finished[index]) {
+        return styles.num;
+      } else if (finished[index] === PROCESS_STATUS_DOING) {
+        return [styles.num, styles.doing].join(' ');
+      } else {
+        return [styles.num, styles.selected].join(' ');
+      }
     }
   }
 
@@ -79,10 +86,7 @@ class ProcessLine extends React.Component {
           </div>
         );
       } else {
-        let className = styles.num;
-        if (this.isSelected(this._index - 1)) {
-          className = `${className} ${styles.selected}`;
-        }
+        const className = this.getItemClass(this._index - 1);
         result.push(
           <div
             className={className}
