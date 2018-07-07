@@ -1,7 +1,7 @@
 const types = require('./action-types.js');
 const combineReducers = require('redux').combineReducers;
 const {PROCESS_TYPE_SERIAL, PROCESS_FORMAT_URLENCODE} = require('../utils/constants');
-
+const {getMockProcess, getDomain} = require('../utils/mock');
 /**
  *
  * @param {*} state
@@ -120,7 +120,8 @@ const _state = {
         }
       ],
       type: PROCESS_TYPE_SERIAL,
-      formatType: PROCESS_FORMAT_URLENCODE
+      formatType: PROCESS_FORMAT_URLENCODE,
+      method: 'GET'
     }
   ],
   domain: false,
@@ -178,6 +179,13 @@ function processData(state = _state, action) {
       return Object.assign({}, state, {
         ..._setName(state, action.name)
       });
+    case types.SET_DEMO_DATA:
+      return {
+        currentProcess: 0,
+        currentExcute: -1,
+        domain: getDomain(),
+        processes: getMockProcess()
+      };
     default:
       return state;
   }

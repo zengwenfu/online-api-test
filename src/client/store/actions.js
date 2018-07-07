@@ -82,6 +82,12 @@ function setName(name) {
   };
 }
 
+function setDemoData() {
+  return {
+    type: types.SET_DEMO_DATA
+  };
+}
+
 module.exports = {
   setGlobal,
   setProcessParam,
@@ -94,5 +100,6 @@ module.exports = {
   addRow,
   deleteProcess,
   setFormatType,
-  setName
+  setName,
+  setDemoData
 };

@@ -21,6 +21,13 @@
   border-bottom: 1px solid #244c76;
   margin-bottom: 25px;
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title h2 {
+  font-size: 18px;
 }
 
 .form-item {

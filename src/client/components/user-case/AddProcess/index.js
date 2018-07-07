@@ -16,13 +16,25 @@ class AddProcess extends React.Component {
     dispatch(actions.setGlobal({domain}));
   }
 
+  setDemo() {
+    const {dispatch} = this.props;
+    dispatch(actions.setDemoData());
+  }
+
   render() {
     const {processData} = this.props;
     return (
       <div className={styles.wrap}>
         <div className={[styles.form, 'main-content'].join(' ')}>
           <div className={styles.globalSet}>
-            <h2 className={styles.title}>全局配置</h2>
+            <div className={styles.title}>
+              <h2>全局配置</h2>
+              <div className={styles.handlers}>
+                <div className={styles.btn} onClick={() => this.setDemo()} role="presentation">
+                  注入Demo
+                </div>
+              </div>
+            </div>
             <div className={styles.formItem}>
               <label htmlFor="domain" className={styles.label}>
                 域名:
