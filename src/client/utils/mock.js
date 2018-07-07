@@ -24,7 +24,8 @@ export function getMockProcess() {
       }),
       type: PROCESS_TYPE_SERIAL,
       formatType: PROCESS_FORMAT_JSON,
-      params: [{}]
+      params: [{}],
+      assert: '$data$.code===0'
     },
     {
       url: `/testFApi/getList`,
@@ -32,7 +33,8 @@ export function getMockProcess() {
       name: 'list',
       type: PROCESS_TYPE_SERIAL,
       formatType: PROCESS_FORMAT_URLENCODE,
-      params: [{}]
+      params: [{}],
+      assert: '$data$.code===0'
     },
     {
       url: `/testFApi/getDetail/$data$.data[0].id`,
@@ -40,7 +42,8 @@ export function getMockProcess() {
       name: 'detail1',
       type: PROCESS_TYPE_SERIAL,
       formatType: PROCESS_FORMAT_URLENCODE,
-      params: [{}]
+      params: [{}],
+      assert: '$data$.code===0'
     },
     {
       url: `/testFApi/getDetailById`,
@@ -53,7 +56,8 @@ export function getMockProcess() {
         }
       ],
       type: PROCESS_TYPE_PARALLEL,
-      formatType: PROCESS_FORMAT_URLENCODE
+      formatType: PROCESS_FORMAT_URLENCODE,
+      assert: '$data$.code===0'
     }
   ];
 }

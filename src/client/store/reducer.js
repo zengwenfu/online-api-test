@@ -62,6 +62,13 @@ function _setFormatType(state, formatType) {
   return result;
 }
 
+function _setProcessAssert(state, {assert}) {
+  const result = state.processes.slice();
+  const process = result[state.currentProcess];
+  process.assert = assert;
+  return result;
+}
+
 function _setProcessParamJson(state, {json}) {
   const result = state.processes.slice();
   const process = result[state.currentProcess];
@@ -188,6 +195,10 @@ function processData(state = _state, action) {
     case types.SET_PROCESS_METHOD:
       return Object.assign({}, state, {
         processes: _setProcessMethod(state, action.data)
+      });
+    case types.SET_PROCESS_ASSERT:
+      return Object.assign({}, state, {
+        processes: _setProcessAssert(state, action.data)
       });
     case types.SET_PROCESS_PARAM_JSON:
       return Object.assign({}, state, {

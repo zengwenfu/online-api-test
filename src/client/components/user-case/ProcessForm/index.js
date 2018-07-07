@@ -182,6 +182,11 @@ class ProcessForm extends React.Component {
     }
   }
 
+  setAssert(e) {
+    const {dispatch} = this.props;
+    dispatch(actions.setProcessAssert({assert: e.target.value}));
+  }
+
   render() {
     const process = this.getProcess();
     return (
@@ -203,6 +208,17 @@ class ProcessForm extends React.Component {
             接口路径:
           </label>
           <input name="api" className={styles.input} value={process.url || ''} onChange={(e) => this.setUrl(e)} />
+        </div>
+        <div className={styles.formItem}>
+          <label htmlFor="assert" className={styles.label}>
+            结果断言:
+          </label>
+          <input
+            name="assert"
+            className={styles.input}
+            value={process.assert || ''}
+            onChange={(e) => this.setAssert(e)}
+          />
         </div>
         <div className={styles.formItem}>
           <label htmlFor="method" className={styles.label}>

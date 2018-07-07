@@ -108,6 +108,13 @@ function resetRequest() {
   };
 }
 
+function setProcessAssert(data) {
+  return {
+    type: types.SET_PROCESS_ASSERT,
+    data
+  };
+}
+
 module.exports = {
   setGlobal,
   setProcessParam,
@@ -124,5 +131,6 @@ module.exports = {
   setDemoData,
   setRequestOptions,
   setRequestResult,
-  resetRequest
+  resetRequest,
+  setProcessAssert
 };
