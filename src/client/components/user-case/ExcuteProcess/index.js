@@ -99,6 +99,19 @@ class ExcuteProcess extends React.Component {
     return obj;
   }
 
+  componentDidMount() {
+    this._logScrollHeight = 0;
+  }
+
+  componentDidUpdate() {
+    const logCon = this.refs.logCon;
+    const scrollHeight = logCon.scrollHeight;
+    if (scrollHeight > this._logScrollHeight) {
+      logCon.scrollTop = scrollHeight;
+      this._logScrollHeight = scrollHeight;
+    }
+  }
+
   render() {
     return (
       <div className={styles.wrap}>
@@ -114,7 +127,9 @@ class ExcuteProcess extends React.Component {
             </div>
           </div>
           {/* <textarea rows="30" cols="80" value={process.json} className={styles.jsonArea} disabled="true" /> */}
-          <div className={styles.logCon}>{this.buildLog()}</div>
+          <div ref="logCon" className={styles.logCon}>
+            {this.buildLog()}
+          </div>
         </div>
       </div>
     );
