@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'development') {
   httpPort = 3000;
   httpsPort = 3001;
 } else {
-  httpPort = 80;
+  httpPort = 8888;
   httpsPort = 443;
 }
 
