@@ -18,7 +18,7 @@
     "dev": "npm run reactServer && cross-env NODE_ENV=development node src/server",
     "staging": "cross-env DB_ENV=mongodb.atlas NODE_ENV=staging node build/server",
     "start": "cross-env NODE_ENV=production node build/server",
-    "pm2Start": "cross-env NODE_ENV=production pm2 build/server",
+    "pm2Start": "cross-env NODE_ENV=production pm2 start build/server",
     "prebuild": "rimraf build",
     "reactServer": "cross-env NODE_ENV=development webpack -p --progress --config=config/webpack.config.server.js",
     "build:reactServer": "cross-env NODE_ENV=production webpack -p --progress --config=config/webpack.config.server.js",
