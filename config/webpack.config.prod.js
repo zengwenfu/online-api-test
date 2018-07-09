@@ -6,8 +6,8 @@ module.exports = merge(commonConfig, {
   mode: 'production',
   resolve: {
     alias: {
-      react: 'react-lite',
-      'react-dom': 'react-lite'
+      // react: 'react-lite',
+      // 'react-dom': 'react-lite'
     }
   },
   plugins: [
