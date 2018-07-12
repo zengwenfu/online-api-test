@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
+
 export default class BasePage extends Component {
   render() {
-    const {children, bundleName, extend} = this.props;
+    const {children, bundleName} = this.props;
     const random = RANDOM;
     const isDev = IS_DEV;
     const version = VERSION;
@@ -26,6 +27,7 @@ export default class BasePage extends Component {
           </div>
           <script type="text/javascript" src={`/vendor_${version}.js?`} />
           <script type="text/javascript" src={`/${bundleName}.js?${random}`} />
+          <script src="https://s4.cnzz.com/z_stat.php?id=1261341438&web_id=1261341438" language="JavaScript" />
         </body>
       </html>
     );

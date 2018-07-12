@@ -31,6 +31,10 @@ a {
   text-decoration: none;
 }
 
+body > a {
+  display: none;
+}
+
 html,
 body {
   width: 100%;
