@@ -8,6 +8,7 @@ export default class Header extends React.Component {
           <div className={styles.logoWrap}>
             <img src={require('assets/logo.png')} className={styles.logo} />
             <h2>Facemagic</h2>
+            <span className={styles.desc}>在线流程测试工具</span>
           </div>
         </div>
       </div>
