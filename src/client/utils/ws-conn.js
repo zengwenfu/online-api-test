@@ -8,6 +8,7 @@ const TYPE_BEFORE_REQUEST = 'breq';
 const TYPE_AFTER_REQUEST = 'areq';
 import actions from 'store/actions';
 let dispatch;
+let isClose = true;
 
 function buildMsg(data, type) {
   return JSON.stringify({
@@ -47,8 +48,16 @@ export function conn({onOpen, onClose, onMessage, onError}) {
   const wsServer = 'ws://' + domain;
   websocket = new WebSocket(wsServer);
   websocket.binaryType = 'arraybuffer';
-  websocket.onopen = onOpen || buildDefaultCb('onOpen');
-  websocket.onclose = onClose || buildDefaultCb('onClose');
+  websocket.onopen = function() {
+    isClose = false;
+    console.log('onOpen');
+    onOpen && onOpen();
+  };
+  websocket.onclose = function() {
+    console.log('onClose');
+    isClose = true;
+    onClose && onClose();
+  };
   websocket.onmessage = onMessage || receiveMsg;
   websocket.onerror = onError || buildDefaultCb('onError');
 }
@@ -56,7 +65,7 @@ export function conn({onOpen, onClose, onMessage, onError}) {
 export function sendProcess(data, disp) {
   dispatch = disp;
   processData = data;
-  if (!websocket) {
+  if (isClose) {
     conn({});
   } else {
     websocket.send(buildMsg(processData, TYPE_PROCESS));

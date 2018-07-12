@@ -84,7 +84,6 @@ class ExcuteProcess extends React.Component {
     const obj = [];
     for (let i = 0; i < results.length; i++) {
       const result = results[i];
-      console.log(result);
       const name = processes[result.index].name;
       if (result.options) {
         const title = `流程（${name}）请求参数:`;
