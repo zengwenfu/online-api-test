@@ -20,6 +20,7 @@
   height: 36px;
   border-radius: 18px;
   margin-right: 20px;
+  cursor: pointer;
 }
 
 .logo-wrap h2 {
@@ -36,4 +37,14 @@
   font-size: 13px;
   letter-spacing: 5px;
   margin-left: 10px;
+}
+
+.inner-wrap {
+  justify-content: space-between;
+}
+
+.nav-item {
+  color: #fff;
+  margin-left: 20px;
+  cursor: pointer;
 }

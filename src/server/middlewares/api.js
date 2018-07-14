@@ -1,10 +1,15 @@
 const renderToString = require('../tools/react-render').renderToString;
 const UserCase = require('../view/UserCase');
+const Help = require('../view/Help');
 const {list, detail, processes} = require('../tools/mock');
 const freedomApi = require('freedom-api');
 module.exports = function setup(app) {
   app.get('/', (req, res) => {
     res.send(renderToString(UserCase, {}));
+  });
+
+  app.get('/help', (req, res) => {
+    res.send(renderToString(Help, {}));
   });
 
   app.get('/freedomApi', (req, res) => {
