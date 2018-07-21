@@ -23,7 +23,9 @@ export default class Header extends React.Component {
             <a href="/help" className={styles.navItem} target="help">
               帮助
             </a>
-            <a className={styles.navItem}>关于</a>
+            <a href="/about" className={styles.navItem} target="about">
+              关于
+            </a>
           </div>
         </div>
       </div>

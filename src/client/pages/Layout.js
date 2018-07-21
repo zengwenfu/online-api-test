@@ -11,9 +11,9 @@ export default class BasePage extends Component {
         <head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <meta name="description" content="instaclip description" />
+          <meta name="description" content="Facemagic, facemagic, 菲麦前端, 菲麦，在线流程测试工具，freedomApi" />
           <meta name="author" content="小虫巨蟹" />
-          <title>Facemagic</title>
+          <title>Facemagic, 在线流程测试工具</title>
           {!isDev && <link rel="stylesheet" href={`/${bundleName}.css?${random}`} type="text/css" />}
         </head>
         <body>

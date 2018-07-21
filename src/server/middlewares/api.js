@@ -1,6 +1,7 @@
 const renderToString = require('../tools/react-render').renderToString;
 const UserCase = require('../view/UserCase');
 const Help = require('../view/Help');
+const About = require('../view/About');
 const {list, detail, processes} = require('../tools/mock');
 const freedomApi = require('freedom-api');
 module.exports = function setup(app) {
@@ -10,6 +11,10 @@ module.exports = function setup(app) {
 
   app.get('/help', (req, res) => {
     res.send(renderToString(Help, {}));
+  });
+
+  app.get('/about', (req, res) => {
+    res.send(renderToString(About, {}));
   });
 
   app.get('/freedomApi', (req, res) => {
